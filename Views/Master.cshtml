@@ -9,19 +9,24 @@
     <title>@ViewData["Title"]</title>
     <style>
         :root {
-            --bg: #f6f3ec;
-            --ink: #1f1d1a;
-            --muted: #6b6358;
+            --bg: #f2efe7;
+            --ink: #1b1a17;
+            --muted: #6b6154;
             --accent: #0f5b4f;
+            --accent-2: #b36a2b;
             --card: #ffffff;
-            --border: #e2dbd0;
+            --border: #e1d8cb;
+            --shadow: 0 14px 30px rgba(22, 20, 16, 0.12);
         }
 
         body {
             margin: 0;
-            font-family: "Merriweather", "Georgia", serif;
+            font-family: "Cormorant Garamond", "Georgia", serif;
             color: var(--ink);
-            background: radial-gradient(circle at 15% 0%, #f3efe6 0%, #f6f3ec 55%, #efe8dc 100%);
+            background:
+                radial-gradient(circle at 10% 0%, rgba(243, 234, 217, 0.9), rgba(242, 239, 231, 0.9) 40%, rgba(236, 229, 216, 0.95) 100%),
+                linear-gradient(120deg, rgba(15, 91, 79, 0.08), transparent 40%),
+                linear-gradient(200deg, rgba(179, 106, 43, 0.08), transparent 45%);
         }
 
         .wrap {
@@ -55,53 +60,133 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(31, 29, 26, 0.08);
+            box-shadow: var(--shadow);
         }
 
         .muted {
             color: var(--muted);
         }
 
-        .search {
+        .search-bar {
             display: grid;
             grid-template-columns: 1fr auto;
             gap: 10px;
-            margin: 16px 0 8px;
+            margin: 20px 0 12px;
         }
 
-        .search input {
+        .search-bar input {
             padding: 12px 14px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             font-family: inherit;
         }
 
-        .search button {
+        .search-bar button {
             padding: 12px 18px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             background: var(--accent);
             color: #fff;
             font-size: 16px;
             cursor: pointer;
         }
 
-        ul.results {
-            list-style: none;
-            padding: 0;
-            margin: 16px 0 0;
+        .intro {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 24px;
         }
 
-        ul.results li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
+        .intro h1 {
+            margin: 0;
+            font-size: 36px;
         }
 
-        ul.results a {
-            color: var(--accent);
+        .intro p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+        }
+
+        .article-card {
+            display: grid;
+            gap: 12px;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            box-shadow: var(--shadow);
+            transform: translateY(0);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: rise 0.45s ease both;
+        }
+
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 36px rgba(22, 20, 16, 0.16);
+        }
+
+        .thumb {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(140deg, rgba(15, 91, 79, 0.12), rgba(179, 106, 43, 0.12));
+            border: 1px solid var(--border);
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .article-title {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .article-title a {
+            color: var(--ink);
             text-decoration: none;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--accent-2);
             font-weight: 700;
+        }
+
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .pagination a,
+        .pagination strong {
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .pagination strong {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
         }
 
         .hero {
@@ -119,6 +204,29 @@
         .author {
             font-weight: 600;
             color: var(--muted);
+        }
+
+        @@keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 640px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .intro h1 {
+                font-size: 28px;
+            }
         }
     </style>
 </head>

@@ -1,42 +1,100 @@
 ﻿@using AbraContentSite.Models
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<HomeViewModel>
+@using System.Net
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<AbraContentSite.Models.HomeViewModel>
 
 @{
-    Layout = "Master.cshtml"; // או ה-Layout הראשי שלך
+    Layout = "Master.cshtml";
 }
 
-<h1>@Model.Content.Value("siteTitle")</h1>
+<section class="card intro">
+    <span class="eyebrow">Editorial Highlights</span>
+    <h1>@Model.Content.Value("siteTitle")</h1>
+    <p class="muted">@Model.Content.Value("aboutText")</p>
 
-<div class="hero-text">
-    @Model.Content.Value("aboutText")
-</div>
+    <form method="get" class="search-bar">
+        <input type="text" name="q" value="@Model.SearchQuery" placeholder="Search articles..." />
+        <button type="submit">Search</button>
+        @if (Model.HasSearched)
+        {
+            <a class="muted" href="@Model.Content.Url()">Clear</a>
+        }
+    </form>
+</section>
 
-<form method="get" style="margin: 20px 0;">
-    <input type="text" name="q" value="@Model.SearchQuery" placeholder="Search articles..." />
-    <button type="submit">Search</button>
-    @if(Model.HasSearched)
+@{
+    string heading = Model.HasSearched
+        ? $"Search Results for: \"{Model.SearchQuery}\""
+        : "All Articles";
+    string baseUrl = Model.Content.Url();
+    string queryValue = Model.SearchQuery ?? string.Empty;
+    string encodedQuery = WebUtility.UrlEncode(queryValue);
+    string BuildPageUrl(int page)
     {
-        <a href="@Model.Content.Url()">Clear</a>
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(queryValue))
+        {
+            parts.Add($"q={encodedQuery}");
+        }
+        if (page > 1)
+        {
+            parts.Add($"page={page}");
+        }
+        return parts.Count == 0 ? baseUrl : $"{baseUrl}?{string.Join("&", parts)}";
     }
-</form>
+}
 
-@if (Model.HasSearched)
+<h3>@heading</h3>
+
+@if (Model.SearchResults != null && Model.SearchResults.Any())
 {
-    <h3>Search Results for: "@Model.SearchQuery"</h3>
-    
-    if (Model.SearchResults != null && Model.SearchResults.Any())
+    <section class="articles-grid">
+        @foreach (var article in Model.SearchResults)
+        {
+            var heroImage = article.Value<IPublishedContent>("heroImage");
+            var articleTitle = article.Value<string>("title") ?? article.Name;
+            <article class="article-card">
+                <div class="thumb">
+                    @if (heroImage is not null)
+                    {
+                        <img src="@heroImage.Url()" alt="@articleTitle" />
+                    }
+                </div>
+                <h4 class="article-title">
+                    <a href="@article.Url()">@articleTitle</a>
+                </h4>
+            </article>
+        }
+    </section>
+
+    if (Model.TotalPages > 1)
     {
-        <ul>
-            @foreach (var article in Model.SearchResults)
+        <nav class="pagination">
+            @if (Model.PageNumber > 1)
             {
-                <li>
-                    <a href="@article.Url()">@article.Name</a>
-                    </li>
+                <a href="@BuildPageUrl(Model.PageNumber - 1)">Previous</a>
             }
-        </ul>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.PageNumber)
+                {
+                    <strong>@i</strong>
+                }
+                else
+                {
+                    <a href="@BuildPageUrl(i)">@i</a>
+                }
+            }
+
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <a href="@BuildPageUrl(Model.PageNumber + 1)">Next</a>
+            }
+        </nav>
     }
-    else
-    {
-        <p>No articles found.</p>
-    }
+}
+else
+{
+    <p>No articles found.</p>
 }
