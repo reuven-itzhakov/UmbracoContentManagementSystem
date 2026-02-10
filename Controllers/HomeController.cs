@@ -1,3 +1,4 @@
+// Handles Home page rendering, search, and pagination.
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Umbraco.Cms.Core.Web;
@@ -18,17 +19,14 @@ namespace AbraContentSite.Controllers
         {
         }
 
-        // This action runs automatically when Umbraco loads a "Home Page" document.
         public override IActionResult Index()
         {
-            // 1. Create the view model.
             var model = new HomeViewModel(CurrentPage)
             {
                 SearchResults = Enumerable.Empty<IPublishedContent>(),
                 HasSearched = false
             };
 
-            // 2. Check for a search query parameter (e.g., 'q').
             string query = HttpContext.Request.Query["q"];
             var allArticles = CurrentPage.DescendantsOfType("article").ToList();
             IEnumerable<IPublishedContent> filtered = allArticles;
@@ -38,8 +36,6 @@ namespace AbraContentSite.Controllers
                 model.SearchQuery = query;
                 model.HasSearched = true;
 
-                // 3. Run the search by fetching descendants of type Article.
-                // (Assuming your article doc type alias is "article")
                 filtered = allArticles
                     .Where(x => (x.Name)
                         .Contains(query, StringComparison.OrdinalIgnoreCase))
@@ -70,7 +66,6 @@ namespace AbraContentSite.Controllers
             model.TotalItems = totalItems;
             model.TotalPages = totalPages;
 
-            // 4. Return the view with the custom model (as required by the task).
             return CurrentTemplate(model);
         }
     }

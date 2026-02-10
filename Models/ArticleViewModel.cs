@@ -1,3 +1,4 @@
+// View model for Article content fields.
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;

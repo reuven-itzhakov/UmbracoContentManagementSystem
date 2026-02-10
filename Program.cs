@@ -1,5 +1,7 @@
+// Application startup and Umbraco bootstrapping.
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+// Ensure local SQLite and media folders exist before Umbraco boots.
 string contentRoot = builder.Environment.ContentRootPath;
 string dataDirectory = Path.Combine(contentRoot, "umbraco", "Data");
 string mediaDirectory = Path.Combine(contentRoot, "wwwroot", "media");
