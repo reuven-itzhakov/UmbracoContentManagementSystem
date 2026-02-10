@@ -1,0 +1,33 @@
+﻿@using Umbraco.Extensions
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+
+@{
+    Layout = "Master.cshtml";
+    ViewData["Title"] = Model.Name;
+
+    string? title = Model.Value<string>("title") ?? Model.Name;
+    string? contentHtml = Model.Value<string>("content");
+    string? authorName = Model.Value<string>("authorName");
+    var heroImage = Model.Value<IPublishedContent>("heroImage");
+}
+
+<article class="card hero">
+    <header>
+        <h1>@title</h1>
+        @if (!string.IsNullOrWhiteSpace(authorName))
+        {
+            <p class="author">By @authorName</p>
+        }
+    </header>
+
+    @if (heroImage is not null)
+    {
+        <img src="@heroImage.Url()" alt="@title" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(contentHtml))
+    {
+        @Html.Raw(contentHtml)
+    }
+</article>

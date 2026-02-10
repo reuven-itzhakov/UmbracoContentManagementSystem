@@ -1,0 +1,137 @@
+﻿@using Umbraco.Extensions
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<object>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        :root {
+            --bg: #f6f3ec;
+            --ink: #1f1d1a;
+            --muted: #6b6358;
+            --accent: #0f5b4f;
+            --card: #ffffff;
+            --border: #e2dbd0;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Merriweather", "Georgia", serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 15% 0%, #f3efe6 0%, #f6f3ec 55%, #efe8dc 100%);
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 36px 20px 72px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 28px;
+        }
+
+        header a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .title {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(31, 29, 26, 0.08);
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .search {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            margin: 16px 0 8px;
+        }
+
+        .search input {
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .search button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        ul.results {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0 0;
+        }
+
+        ul.results li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        ul.results a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .hero {
+            display: grid;
+            gap: 18px;
+        }
+
+        .hero img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .author {
+            font-weight: 600;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+    @{
+        var content = Umbraco.AssignedContentItem;
+    }
+    <div class="wrap">
+        <header>
+            <a href="@content?.Root().Url()" class="title">@content?.Root().Name</a>
+            <span class="muted">@DateTime.Now.Year</span>
+        </header>
+        @RenderBody()
+    </div>
+</body>
+</html>

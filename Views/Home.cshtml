@@ -1,0 +1,29 @@
+﻿@using Umbraco.Extensions
+@using AbraContentSite.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<HomeViewModel>
+
+@{
+    Layout = "master.cshtml";
+    ViewData["Title"] = Model.CurrentPage?.Name ?? "Home";
+
+    string? topics = Model.CurrentPage?.Value<string>("topics");
+    string? introHtml = Model.CurrentPage?.Value<string>("intro");
+    string query = Context.Request.Query["q"].ToString().Trim();
+}
+
+<section class="card">
+    <h1>@ViewData["Title"]</h1>
+    @if (!string.IsNullOrWhiteSpace(topics))
+    {
+        <p class="muted">@topics</p>
+    }
+    @if (!string.IsNullOrWhiteSpace(introHtml))
+    {
+        @Html.Raw(introHtml)
+    }
+
+    <form method="get" action="@Model.CurrentPage?.Url()" class="search">
+        <input type="search" name="q" value="@query" placeholder="Search articles by title" />
+        <button type="submit">Search</button>
+    </form>
+</section>
