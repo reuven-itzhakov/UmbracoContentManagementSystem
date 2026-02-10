@@ -41,7 +41,7 @@ namespace AbraContentSite.Controllers
                 // 3. Run the search by fetching descendants of type Article.
                 // (Assuming your article doc type alias is "article")
                 filtered = allArticles
-                    .Where(x => (x.Value<string>("title") ?? x.Name)
+                    .Where(x => (x.Name)
                         .Contains(query, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
