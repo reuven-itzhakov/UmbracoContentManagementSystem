@@ -26,9 +26,8 @@ if (!File.Exists(sqlitePath))
 AppDomain.CurrentDomain.SetData("DataDirectory", dataDirectory);
 builder.Configuration["ConnectionStrings:umbracoDbDSN"] =
     $"Data Source={sqlitePath};Cache=Shared;Foreign Keys=True;Pooling=True";
-
-Console.WriteLine($"Umbraco DB path: {sqlitePath}");
-Console.WriteLine($"Umbraco DB DSN: {builder.Configuration["ConnectionStrings:umbracoDbDSN"]}");
 ```
 
-4. 
+4. added templates in the backoffice
+5. added Document Types in the backoffice
+6. added page in the content tab and published it

@@ -1,33 +1,28 @@
 ﻿@using Umbraco.Extensions
-@using Umbraco.Cms.Core.Models.PublishedContent
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using AbraContentSite.Models
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ArticleViewModel>
 
 @{
     Layout = "Master.cshtml";
-    ViewData["Title"] = Model.Name;
-
-    string? title = Model.Value<string>("title") ?? Model.Name;
-    string? contentHtml = Model.Value<string>("content");
-    string? authorName = Model.Value<string>("authorName");
-    var heroImage = Model.Value<IPublishedContent>("heroImage");
+    ViewData["Title"] = Model.Title;
 }
 
 <article class="card hero">
     <header>
-        <h1>@title</h1>
-        @if (!string.IsNullOrWhiteSpace(authorName))
+        <h1>@Model.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.AuthorName))
         {
-            <p class="author">By @authorName</p>
+            <p class="author">By @Model.AuthorName</p>
         }
     </header>
 
-    @if (heroImage is not null)
+    @if (Model.HeroImage is not null)
     {
-        <img src="@heroImage.Url()" alt="@title" />
+        <img src="@Model.HeroImage.Url()" alt="@Model.Title" />
     }
 
-    @if (!string.IsNullOrWhiteSpace(contentHtml))
+    @if (!string.IsNullOrWhiteSpace(Model.ContentHtml))
     {
-        @Html.Raw(contentHtml)
+        @Html.Raw(Model.ContentHtml)
     }
 </article>

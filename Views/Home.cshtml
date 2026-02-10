@@ -1,29 +1,42 @@
-﻿@using Umbraco.Extensions
-@using AbraContentSite.Models
+﻿@using AbraContentSite.Models
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<HomeViewModel>
 
 @{
-    Layout = "master.cshtml";
-    ViewData["Title"] = Model.CurrentPage?.Name ?? "Home";
-
-    string? topics = Model.CurrentPage?.Value<string>("topics");
-    string? introHtml = Model.CurrentPage?.Value<string>("intro");
-    string query = Context.Request.Query["q"].ToString().Trim();
+    Layout = "Master.cshtml"; // או ה-Layout הראשי שלך
 }
 
-<section class="card">
-    <h1>@ViewData["Title"]</h1>
-    @if (!string.IsNullOrWhiteSpace(topics))
-    {
-        <p class="muted">@topics</p>
-    }
-    @if (!string.IsNullOrWhiteSpace(introHtml))
-    {
-        @Html.Raw(introHtml)
-    }
+<h1>@Model.Content.Value("siteTitle")</h1>
 
-    <form method="get" action="@Model.CurrentPage?.Url()" class="search">
-        <input type="search" name="q" value="@query" placeholder="Search articles by title" />
-        <button type="submit">Search</button>
-    </form>
-</section>
+<div class="hero-text">
+    @Model.Content.Value("aboutText")
+</div>
+
+<form method="get" style="margin: 20px 0;">
+    <input type="text" name="q" value="@Model.SearchQuery" placeholder="Search articles..." />
+    <button type="submit">Search</button>
+    @if(Model.HasSearched)
+    {
+        <a href="@Model.Content.Url()">Clear</a>
+    }
+</form>
+
+@if (Model.HasSearched)
+{
+    <h3>Search Results for: "@Model.SearchQuery"</h3>
+    
+    if (Model.SearchResults != null && Model.SearchResults.Any())
+    {
+        <ul>
+            @foreach (var article in Model.SearchResults)
+            {
+                <li>
+                    <a href="@article.Url()">@article.Name</a>
+                    </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No articles found.</p>
+    }
+}

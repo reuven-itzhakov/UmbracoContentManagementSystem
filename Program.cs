@@ -17,9 +17,6 @@ AppDomain.CurrentDomain.SetData("DataDirectory", dataDirectory);
 builder.Configuration["ConnectionStrings:umbracoDbDSN"] =
     $"Data Source={sqlitePath};Cache=Shared;Foreign Keys=True;Pooling=True";
 
-Console.WriteLine($"Umbraco DB path: {sqlitePath}");
-Console.WriteLine($"Umbraco DB DSN: {builder.Configuration["ConnectionStrings:umbracoDbDSN"]}");
-
 builder.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
